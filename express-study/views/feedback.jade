@@ -1,8 +1,16 @@
 extends layout
 
 block content
-	.feedback-form
-		.row 
-			| sajin 
-			input#firstname(type"text" name="firstname")
-		.row sajin
+	form#feedback-form(action="/feedback" method="post")
+		.feedback-form
+			.row-div
+				span.email First Name 
+				input#firstname(type="text", name="firstname")
+			.row-div 
+				span.email Email
+					input#email(type="text", name="email")
+			.comment-div
+				span.comment-text Comment
+					textarea#comment(name="comment")
+			input#feedback-submit(type="submit" name="submit" value="Submit")			
+				
