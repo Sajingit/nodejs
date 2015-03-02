@@ -21,7 +21,7 @@ router.post('/', function(req, res) {
 		email.feedbackEmail(req, res);
 	}
 	
-	//res.render('feedback', { title: 'Feed back form submit', message: message });
+	res.render('feedback', { title: 'Feed back form submit', message: message });
 });
 
 

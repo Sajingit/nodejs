@@ -1,0 +1,7 @@
+extends layout
+
+block content
+	form#feedback-form(action="/register" method="post")
+		.forum-group
+			label(for="Name") Name
+			input(type="text", name="name")
