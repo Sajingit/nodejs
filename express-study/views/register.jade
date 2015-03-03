@@ -1,7 +1,44 @@
 extends layout
 
 block content
-	form#feedback-form(action="/register" method="post")
+	form#register-form(action="/register" method="post")
 		.forum-group
-			label(for="Name") Name
-			input(type="text", name="name")
+			label(for="username") 
+				| Usename
+				span *
+			input(type="text", name="username")
+			span.error 
+				if(errors)
+					each error in errors
+                		li= error.msg
+		.forum-group
+			label(for="password") 
+				| Password
+				span *
+			input(type="password", name="password")
+		.forum-group
+			label(for="repassword") 
+				| Re-enter Password
+				span *
+			input(type="password", name="repassword")
+		.separator
+		.forum-group
+			label(for="fname") 
+				| First Name
+				span *
+			input(type="text", name="fname")
+		.forum-group
+			label(for="lname") 
+				| Last Name
+				span *
+			input(type="text", name="lname")
+		.forum-group
+			label(for="email") 
+				| Email
+				span *
+			input(type="text", name="email")
+		.forum-group
+			label(for="email") Comments
+			textarea(type="text", name="comment")
+		.submit-button
+			input(type="submit", name="submit", value="Submit")

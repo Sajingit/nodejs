@@ -1,0 +1,39 @@
+#register-form{
+	float: left;
+	width: 100%;
+}
+.forum-group {
+    clear: both;
+    float: left;
+    margin-bottom: 10px;
+    width: 50%;
+}
+.forum-group label {
+    float: left;
+    font-size: 14px;
+    width: 30%;
+}
+.forum-group input {
+    border: 1px solid #ccc;
+    height: 30px;
+}
+.separator {
+    border-top: 1px solid #ccc;
+    clear: both;
+    float: left;
+    margin-bottom: 15px;
+    margin-top: 5px;
+    width: 50%;
+}
+.submit-button{
+    clear: both;
+    float: left;
+}
+.submit-button input{
+	width: 100px;
+	height: 30px;
+	border: 1px solid #ccc;
+}
+input[type="submit"]{
+	cursor: pointer;
+}
