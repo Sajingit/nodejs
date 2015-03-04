@@ -6,39 +6,38 @@ block content
 			label(for="username") 
 				| Usename
 				span *
-			input(type="text", name="username")
-			span.error 
-				if(errors)
-					each error in errors
-                		li= error.msg
+			input(type="text", name="username", value="#{data.username}")
 		.forum-group
 			label(for="password") 
 				| Password
 				span *
-			input(type="password", name="password")
+			input(type="password", name="password", value="")
 		.forum-group
 			label(for="repassword") 
 				| Re-enter Password
 				span *
-			input(type="password", name="repassword")
+			input(type="password", name="repassword", value="")
 		.separator
 		.forum-group
 			label(for="fname") 
 				| First Name
 				span *
-			input(type="text", name="fname")
+			input(type="text", name="fname", value="#{data.fname}")
 		.forum-group
 			label(for="lname") 
 				| Last Name
 				span *
-			input(type="text", name="lname")
+			input(type="text", name="lname", value="#{data.lname}")
 		.forum-group
 			label(for="email") 
 				| Email
 				span *
-			input(type="text", name="email")
+			input(type="text", name="email", value="#{data.email}")
 		.forum-group
 			label(for="email") Comments
 			textarea(type="text", name="comment")
 		.submit-button
 			input(type="submit", name="submit", value="Submit")
+		if errors
+			each error in errors
+				li= error.msg
