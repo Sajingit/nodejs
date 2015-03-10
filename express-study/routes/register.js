@@ -1,5 +1,7 @@
+//grab the things we need
 var express = require('express');
 var router  = express.Router();
+
 
 router.get('/', function(req, res) {
 	
@@ -14,6 +16,7 @@ router.get('/', function(req, res) {
 router.post('/', function(req, res) {
 	
 	var email = require('../shared/email');
+	var User = require('../model/register');
 	
 	//Form validation
 	req.assert('username', 'Usename field is empty').notEmpty();
@@ -35,6 +38,38 @@ router.post('/', function(req, res) {
 	}
 	else {
 		
+		var newUser = User.UserAuthModel({
+			
+		username: req.body.username,
+		password: req.body.password
+		
+		});
+		
+		var newUserDetails = User.UserDetailsModel({
+			
+			fname: req.body.fname,
+			lname: req.body.lname,
+			email: req.body.email,
+			comments: req.body.comments
+			
+		});
+		
+		
+		
+		// call the built-in save method to save to the database
+		newUser.save(function(err,room) {
+		  if (err) throw err;
+		  
+		  console.log("Room::" + room )
+		  console.log('User saved successfully!');
+		});
+		
+		// call the built-in save method to save to the database
+		newUserDetails.save(function(err) {
+		  if (err) throw err;
+
+		  console.log('User Details saved successfully!');
+		});
 		
 		email.registerEmail(req.body);
 		
