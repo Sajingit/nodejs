@@ -16,7 +16,6 @@ router.get('/', function(req, res) {
 router.post('/', function(req, res) {
 	
 	var email = require('../shared/email');
-	var User = require('../model/register');
 	
 	//Form validation
 	req.assert('username', 'Usename field is empty').notEmpty();
@@ -38,38 +37,7 @@ router.post('/', function(req, res) {
 	}
 	else {
 		
-		var newUser = User.UserAuthModel({
-			
-		username: req.body.username,
-		password: req.body.password
-		
-		});
-		
-		var newUserDetails = User.UserDetailsModel({
-			
-			fname: req.body.fname,
-			lname: req.body.lname,
-			email: req.body.email,
-			comments: req.body.comments
-			
-		});
-		
-		
-		
-		// call the built-in save method to save to the database
-		newUser.save(function(err,room) {
-		  if (err) throw err;
-		  
-		  console.log("Room::" + room )
-		  console.log('User saved successfully!');
-		});
-		
-		// call the built-in save method to save to the database
-		newUserDetails.save(function(err) {
-		  if (err) throw err;
-
-		  console.log('User Details saved successfully!');
-		});
+		saveUserDatas(req.body);
 		
 		email.registerEmail(req.body);
 		
@@ -96,6 +64,44 @@ var initialFormObjects = function(){
 	return obj;
 	
 }
+
+
+/**
+ * Initialize form objects to null
+ */
+var saveUserDatas = function(data){
+	
+	var user = require('../model/register');
+	
+	var userCredential = user.UserCredentials({
+		username: data.username,
+		password: data.password
+	});
+	
+	// call the built-in save method to save to the database
+	userCredential.save(function(err,response) {
+		if (err) throw err;
+		  
+		
+		var userDetail = user.UserDetails({
+			user_id:response.id,
+			fname: data.fname,
+			lname: data.lname,
+			email: data.email,
+			comments: data.comments
+		});
+		
+		// call the built-in save method to save to the database
+		userDetail.save(function(err) {
+		  if (err) throw err;
+
+		  console.log('User Details saved successfully!');
+		});
+		
+	});
+	
+}
+
 
 exports.initialFormObjects = initialFormObjects;
 module.exports = router;
