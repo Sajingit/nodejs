@@ -6,7 +6,10 @@ var router  = express.Router();
 router.get('/', function(req, res) {
 	
 	var obj = initialFormObjects();
+	//checkUser ();
 	res.render('register', { title: 'Registration form', data:obj  });
+	
+	
 });
 
 
@@ -37,6 +40,7 @@ router.post('/', function(req, res) {
 	}
 	else {
 		
+		checkUser (req.body.email);
 		saveUserDatas(req.body);
 		
 		email.registerEmail(req.body);
@@ -67,7 +71,7 @@ var initialFormObjects = function(){
 
 
 /**
- * Initialize form objects to null
+ * Save user datas to mongodb
  */
 var saveUserDatas = function(data){
 	
@@ -82,7 +86,6 @@ var saveUserDatas = function(data){
 	userCredential.save(function(err,response) {
 		if (err) throw err;
 		  
-		
 		var userDetail = user.UserDetails({
 			user_id:response.id,
 			fname: data.fname,
@@ -101,6 +104,20 @@ var saveUserDatas = function(data){
 	});
 	
 }
+
+var checkUser = function(data){
+	
+	var user = require('../model/register');
+	
+	user.UserDetails.find({ email: data.email}, function (err, doc){
+		
+		console.log("Executed ----" + doc);
+		  // doc is a Document
+	});
+	
+}
+
+
 
 
 exports.initialFormObjects = initialFormObjects;
