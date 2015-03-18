@@ -5,6 +5,7 @@ var router  = express.Router();
 
 router.get('/', function(req, res) {
 	
+
 	var obj = initialFormObjects();
 	res.render('register', { title: 'Registration form', data:obj  });
 	
@@ -17,6 +18,13 @@ router.get('/', function(req, res) {
  */
 router.post('/', function(req, res) {
 	
+	var user = require('../model/register');
+	
+	user.UserCredentials.find([{ username: req.body.username }, { email: req.body.email }], function(err, count){
+		console.log(count);
+	});
+	
+	return false;
 	var email = require('../shared/email');
 	
 	//checkUser (req.body);
@@ -86,7 +94,7 @@ var saveUserDatas = function(data, res){
 		if (err) throw err;
 		console.log(count);
 		if(count > 0){
-			var usernameErrMsg = 'Username is already in use';
+			var duplicateMsg = 'Username is already in use';
 		}else {
 			
 			var userCredential = user.UserCredentials({
@@ -116,10 +124,10 @@ var saveUserDatas = function(data, res){
 			});
 		}
 		
-		obj = initialFormObjects();console.log(usernameErrMsg);
+		obj = initialFormObjects();console.log(duplicateMsg);
 		var err = [{
-				msg: usernameErrMsg	
-		}]
+				msg: duplicateMsg	
+		}];
 		res.render('register', { title: 'Registration form', errors:err, data:obj});
 		
 	});
