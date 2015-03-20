@@ -2,20 +2,10 @@
 var mongoose = require('mongoose');
 
 //Create user auth schema
-var UserCredentialSchema = mongoose.Schema({
+var UserDetailsSchema = mongoose.Schema({
 	
 	username: String,
-	password: String
-	
-});
-
-//Create user model
-var UserCredentials = mongoose.model('UserCredentials', UserCredentialSchema, 'usercredentials');  
-
-
-//Create user details schema
-var UserDetailsSchema = mongoose.Schema({
-	user_id: String,
+	password: String,
 	fname: String,
 	lname: String,
 	email: String,
@@ -24,11 +14,9 @@ var UserDetailsSchema = mongoose.Schema({
 });
 
 //Create user model
-var UserDetails = mongoose.model('UserDetails', UserDetailsSchema, 'userdetails');
+var UserDetails = mongoose.model('UserDetails', UserDetailsSchema, 'userdetails');  
 
-
-// make this 'UserModel' model available to our users in our Node applications
-exports.UserCredentials = UserCredentials; 
+// make this 'UserDetails' model available to Node applications
 exports.UserDetails = UserDetails; 
 
 

@@ -18,16 +18,14 @@ router.get('/', function(req, res) {
  */
 router.post('/', function(req, res) {
 	
-	var user = require('../model/register');
+	//var user = require('../model/register');
 	
-	user.UserCredentials.find([{ username: req.body.username }, { email: req.body.email }], function(err, count){
-		console.log(count);
-	});
+	//user.UserCredentials.find([{ username: req.body.username }, { email: req.body.email }], function(err, count){
+		//console.log(count);
+	//});
 	
-	return false;
-	var email = require('../shared/email');
+	//return false;
 	
-	//checkUser (req.body);
 	
 	//Form validation
 	req.assert('username', 'Usename field is empty').notEmpty();
@@ -49,15 +47,7 @@ router.post('/', function(req, res) {
 	}
 	else {
 		
-		//var usernameCount = getUsernameCount (req.body.usename, function(err,a){ console.log(a);return a;});
-		//var emailCount = getEmailCount (req.body.email);
-		
-		//console.log(usernameCount);
-		//console.log("GET Email COUNT:: " + emailCount);
-		
 		saveUserDatas(req.body, res);
-		
-		email.registerEmail(req.body);
 		
 		
 	}
@@ -88,46 +78,64 @@ var initialFormObjects = function(){
  */
 var saveUserDatas = function(data, res){
 	
-	var user = require('../model/register');
+	var user  = require('../model/register');
+	var email = require('../shared/email');
+	var err	  = {};
+	var duplicateMsg = null;
 	
-	user.UserCredentials.count({ username: data.username}, function(err, count){
+	user.UserDetails.count({ username: data.username}, function(err, count){
+		
 		if (err) throw err;
-		console.log(count);
-		if(count > 0){
-			var duplicateMsg = 'Username is already in use';
-		}else {
-			
-			var userCredential = user.UserCredentials({
-				username: data.username,
-				password: data.password
-			});
-			
-			// call the built-in save method to save to the database
-			userCredential.save(function(err,response) {
-				if (err) throw err;
-				  
-				var userDetail = user.UserDetails({
-					user_id:response.id,
-					fname: data.fname,
-					lname: data.lname,
-					email: data.email,
-					comments: data.comments
-				});
-				
-				// call the built-in save method to save to the database
-				userDetail.save(function(err) {
-				  if (err) throw err;
 
-				  console.log('User Details saved successfully!');
-				});
-				
+		if(count > 0){
+			console.log("1");
+			var duplicateMsg = 'Username is already in use';
+			
+		}else {
+			console.log("2");
+			user.UserDetails.count({ email: data.email}, function(err, count){
+				if (err) throw err;
+				console.log("COUNT::");console.log(count);
+				if(count > 0){
+					console.log("3");
+					var duplicateMsg = 'Email is already in use';
+					var name = 'sajin';
+					
+				}else{
+					
+					console.log("4");	  
+					var userDetail = user.UserDetails({
+						username: data.username,
+						password: data.password,
+						fname: data.fname,
+						lname: data.lname,
+						email: data.email,
+						comments: data.comments
+					});
+					
+					// call the built-in save method to save to the database
+					userDetail.save(function(err) { console.log("5");
+					  if (err) throw err;
+	
+					  console.log('User Details saved successfully!');
+					  email.registerEmail(data);
+					});
+				}
 			});
 		}
 		
-		obj = initialFormObjects();console.log(duplicateMsg);
-		var err = [{
+		var obj = initialFormObjects();console.log('Name::');console.log(name);console.log(duplicateMsg);
+		
+		if(duplicateMsg){
+			
+			var err = [{
 				msg: duplicateMsg	
-		}];
+			}];
+			
+			obj = data;
+			
+		}
+		
 		res.render('register', { title: 'Registration form', errors:err, data:obj});
 		
 	});
