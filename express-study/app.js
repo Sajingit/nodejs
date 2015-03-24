@@ -9,12 +9,17 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var feedback = require('./routes/feedback');
 var register = require('./routes/register');
+var login = require('./routes/login');
 
 var app = express();
+var port = process.env.PORT || 8080;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,10 +34,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Use passport authentication credentials
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/', routes);
 app.use('/users', users);
 app.use('/feedback', feedback);
 app.use('/register', register);
+app.use('/login', login);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -64,4 +74,6 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
+
+app.listen(port);
 module.exports = app;

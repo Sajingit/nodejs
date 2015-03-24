@@ -32,7 +32,6 @@ router.post('/', function(req, res) {
 	var errors = req.validationErrors();
 	
 	if(errors){
-		console.log(errors);
 		res.render('register', { title: 'Registration form' , errors:errors, data:req.body });
 	}
 	else {
