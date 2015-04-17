@@ -8,6 +8,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
+var flash = require('connect-flash');
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -74,6 +75,8 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
+
+
 
 app.listen(port);
 module.exports = app;

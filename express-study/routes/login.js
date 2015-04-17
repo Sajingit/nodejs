@@ -1,6 +1,8 @@
 //grab the things we need
 var express = require('express');
 var router  = express.Router();
+var passport = require('passport');
+
 
 router.get('/', function(req, res) {
 	
@@ -10,7 +12,18 @@ router.get('/', function(req, res) {
 });
 
 
-router.post('/', function(req, res) {
+router.post('/',
+		  passport.authenticate('local', { successRedirect: '/',
+		                                   failureRedirect: '/loginfailure',
+		                                   failureFlash: true 
+		                                   })
+		);
+
+
+
+
+
+/*router.post('/', function(req, res) {
 	
 	console.log(req.body);
 	req.assert('username', 'Please fill your username').notEmpty();
@@ -21,6 +34,7 @@ router.post('/', function(req, res) {
 	
 	if(errors){
 		res.render('login', { title: 'Login form' , errors:errors, data:req.body });
+		
 	}else{
 		
 		
@@ -32,7 +46,7 @@ router.post('/', function(req, res) {
 	//res.render('login', { title: 'Login form', data:obj  });
 	//
 	
-});
+});*/
 
 /**
  * Initialize form objects to null

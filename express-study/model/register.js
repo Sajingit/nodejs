@@ -1,5 +1,7 @@
 //grab the things we need
 var mongoose = require('mongoose');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
 //Create user auth schema
 var UserDetailsSchema = mongoose.Schema({
@@ -17,7 +19,7 @@ var UserDetailsSchema = mongoose.Schema({
 var UserDetails = mongoose.model('UserDetails', UserDetailsSchema, 'userdetails');  
 
 // make this 'UserDetails' model available to Node applications
-//exports.UserDetails = UserDetails; 
+exports.UserDetails = UserDetails; 
 
 
 
@@ -62,22 +64,36 @@ exports.saveUserDatas = function(data, callback){
 			});
 		}
 		
-		//var obj = initialFormObjects();console.log('Name::');console.log(name);console.log(duplicateMsg);
-		
-		//if(duplicateMsg){
-			
-			//var err = [{
-				//msg: duplicateMsg	
-			//}];
-			
-			//obj = data;
-			
-		//}
-		
-		//res.render('register', { title: 'Registration form', errors:err, data:obj});
-		
 	});
 }
+
+//Set passport for authentication
+passport.use('local', new LocalStrategy(
+  function(username, password, done) {
+	  
+	  console.log("SAJIN TEST");
+	  UserDetails.findOne({ username: username }, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
+    });
+  }
+));
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+	UserDetails.findById(id, function(err, user) {
+	  done(err, user);
+	});
+});
 
 
 
